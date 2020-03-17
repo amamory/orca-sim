@@ -40,6 +40,9 @@
 #define UART_WRITE		0xf00000e0
 #define UART_READ			0xf00000e0
 #define UART_DIVISOR		0xf00000f0
+#define MULT_RESULT		0xf0000100
+#define MULT_OP1		0xf0000104
+#define MULT_OP2		0xf0000108
 
 #define ntohs(A) ( ((A)>>8) | (((A)&0xff)<<8) )
 #define htons(A) ntohs(A)
@@ -56,6 +59,48 @@ typedef struct {
 	uint64_t cycles;
 } risc_v_state;
 
+class UntimedMultiplier : public UntimedModel{
+
+private:
+	float _op1;
+	float _op2;
+public:	
+
+	UntimedMultiplier(std::string name): UntimedModel(name) {_op1=0; _op2=0;};
+	~UntimedMultiplier(){};
+
+	// getters
+	float GetResult() {
+		float res = _op1*_op2;
+		cout << " XXXXXXXXXXXXXXXXXX GetResult " << _op1 << " x " << _op2 << " = " << res << endl;
+		return res ;
+		
+		};
+	float GetOp1() {
+		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op1 << endl;
+		return _op1;
+	};
+	float GetOp2() {
+		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op2 << endl;
+		return _op2;
+	};
+
+	// setters
+
+	void SetOp1(float op1) {
+		_op1 = op1; 
+		//cout << " XXXXXXXXXXXXXXXXXX SetOp1: " << _op1 << endl;
+
+		};
+	void SetOp2(float op2) {
+		_op2 = op2; 
+		//cout << " XXXXXXXXXXXXXXXXXX SetOp2: " << _op2 << endl;
+
+		};
+
+	void Reset(){_op1=0; _op2=0;};
+};
+
 class THellfireProcessor : public TimedModel{
 
 private:
@@ -69,6 +114,8 @@ private:
 	risc_v_state context;
 	risc_v_state *s;
 	int i;
+
+	UntimedMultiplier* _mult;
 	
 	#ifdef HFRISCV_ENABLE_COUNTERS
 	USignal<uint32_t>* _counter_iarith;

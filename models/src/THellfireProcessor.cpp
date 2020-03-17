@@ -159,6 +159,9 @@ int32_t THellfireProcessor::mem_read(risc_v_state *s, int32_t size, uint32_t add
 			case COMPARE2:		return s->compare2;
 			case UART_READ:		return getchar();
 			case UART_DIVISOR:	return 0;
+			case MULT_RESULT:   return _mult->GetResult();
+			case MULT_OP1:      return _mult->GetOp1();
+			case MULT_OP2:      return _mult->GetOp2();
 		}
 			
 		//may the requested address fall in unmapped range, halt the simulation
@@ -257,17 +260,19 @@ void THellfireProcessor::mem_write(risc_v_state *s, int32_t size, uint32_t addre
 		}
 		
 		case IRQ_VECTOR:	s->vector = value; return;
-		case IRQ_CAUSE:	s->cause = value; return;
+		case IRQ_CAUSE:	    s->cause = value; return;
 		case IRQ_MASK:		s->mask = value; return;
 		case IRQ_EPC:		s->epc = value; return;
 		case COUNTER:		s->counter = value; return;
 		case COMPARE:		s->compare = value; s->cause &= 0xffef; return;
 		case COMPARE2:		s->compare2 = value; s->cause &= 0xffdf; return;
 
-		case DEBUG_ADDR: output_debug << (int8_t)(value & 0xff) << std::flush; return;
-		case UART_WRITE: output_uart << (int8_t)(value & 0xff) << std::flush; return;
-		case UART_DIVISOR: return;
-
+		case DEBUG_ADDR:    output_debug << (int8_t)(value & 0xff) << std::flush; return;
+		case UART_WRITE:    output_uart << (int8_t)(value & 0xff) << std::flush; return;
+		case UART_DIVISOR:  return;
+		case MULT_RESULT:   return; // do nothing
+		case MULT_OP1:      _mult->SetOp1(value); return; 
+		case MULT_OP2:      _mult->SetOp2(value); return; 
 		case EXIT_TRAP:
 			std::cout << this->GetName() << ": exit trap triggered! " << std::endl;
 			dumpregs(s);
@@ -689,6 +694,7 @@ THellfireProcessor::THellfireProcessor(string name, USignal<uint8_t>* intr, USig
 
 	s = &context;
 	memset(s, 0, sizeof(risc_v_state));
+	_mult = new UntimedMultiplier("mult");
 	
 	s->vector = 0;
 	s->cause = 0;
@@ -729,6 +735,8 @@ THellfireProcessor::~THellfireProcessor(){
 	delete _counter_hosttime;
 
 	#endif
+
+	delete _mult;
 }
 
 void THellfireProcessor::Reset(){
