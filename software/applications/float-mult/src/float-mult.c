@@ -61,7 +61,7 @@ void float_mult(void){
 		out_buggy.i = mult(op1.i, op2.i); 
 		// se estivesse correto, o valor de f2_copy == f2. f2_copy está truncado !
 		op2_copy.i = MULT_OP2;
-		i= ftoa(op2_copy.f,sop2_copy,2);
+		ftoa(op2_copy.f,sop2_copy,2);
 	
 		// esse resultdo da correto
 		out_ok.f = op1.f*op2.f;

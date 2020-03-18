@@ -1,21 +1,21 @@
 # Do not modify the lines below
-APP_COUNTER_TEST_NAME  := float-mult
-APP_COUNTER_TEST_DIR   := $(SRC_DIR)/../applications/$(APP_COUNTER_TEST_NAME)
-APP_COUNTER_TEST_SRC   := $(APP_COUNTER_TEST_DIR)/src
-APP_COUNTER_TEST_INC   := $(APP_COUNTER_TEST_DIR)/include
-APP_COUNTER_TEST_LIB   := app-$(APP_COUNTER_TEST_NAME).a 
+APP_FLOAT_MULT_NAME  := float-mult
+APP_FLOAT_MULT_DIR   := $(SRC_DIR)/../applications/$(APP_FLOAT_MULT_NAME)
+APP_FLOAT_MULT_SRC   := $(APP_FLOAT_MULT_DIR)/src
+APP_FLOAT_MULT_INC   := $(APP_FLOAT_MULT_DIR)/include
+APP_FLOAT_MULT_LIB   := app-$(APP_FLOAT_MULT_NAME).a 
 
 # Update these lines with your source code
-APP_COUNTER_TEST_OBJS := \
-	$(APP_COUNTER_TEST_NAME).o
+APP_FLOAT_MULT_OBJS := \
+	$(APP_FLOAT_MULT_NAME).o
 
 #pack everithing in a single lib
-$(APP_COUNTER_TEST_LIB) : $(APP_COUNTER_TEST_OBJS)
-	ar rcs $(APP_COUNTER_TEST_LIB) $(APP_COUNTER_TEST_OBJS) 
+$(APP_FLOAT_MULT_LIB) : $(APP_FLOAT_MULT_OBJS)
+	ar rcs $(APP_FLOAT_MULT_LIB) $(APP_FLOAT_MULT_OBJS) 
 
 #compile each individual object file
-%.o: $(APP_COUNTER_TEST_SRC)/%.c
-	$(CC) $(CFLAGS) -c -o $@ $< -I$(APP_COUNTER_TEST_INC)
+%.o: $(APP_FLOAT_MULT_SRC)/%.c
+	$(CC) $(CFLAGS) -c -o $@ $< -I$(APP_FLOAT_MULT_INC)
 
 #check whether .h are up to date
-$(APP_COUNTER_TEST_SRC)/%.c: $(APP_COUNTER_TEST_INC)/%.h
+$(APP_FLOAT_MULT_SRC)/%.c: $(APP_FLOAT_MULT_INC)/%.h
