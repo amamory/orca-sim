@@ -1,21 +1,21 @@
 # Do not modify the lines below
-APP_COUNTER_TEST_NAME  := mnist
-APP_COUNTER_TEST_DIR   := $(SRC_DIR)/../applications/$(APP_COUNTER_TEST_NAME)
-APP_COUNTER_TEST_SRC   := $(APP_COUNTER_TEST_DIR)/src
-APP_COUNTER_TEST_INC   := $(APP_COUNTER_TEST_DIR)/include
-APP_COUNTER_TEST_LIB   := app-$(APP_COUNTER_TEST_NAME).a 
+APP_MNIST_NAME  := mnist
+APP_MNIST_DIR   := $(SRC_DIR)/../applications/$(APP_MNIST_NAME)
+APP_MNIST_SRC   := $(APP_MNIST_DIR)/src
+APP_MNIST_INC   := $(APP_MNIST_DIR)/include
+APP_MNIST_LIB   := app-$(APP_MNIST_NAME).a 
 
 # Update these lines with your source code
-APP_COUNTER_TEST_OBJS := \
+APP_MNIST_OBJS := \
 	mnist.o
 
 #pack everithing in a single lib
-$(APP_COUNTER_TEST_LIB) : $(APP_COUNTER_TEST_OBJS)
-	ar rcs $(APP_COUNTER_TEST_LIB) $(APP_COUNTER_TEST_OBJS) 
+$(APP_MNIST_LIB) : $(APP_MNIST_OBJS)
+	ar rcs $(APP_MNIST_LIB) $(APP_MNIST_OBJS) 
 
 #compile each individual object file
-%.o: $(APP_COUNTER_TEST_SRC)/%.c
-	$(CC) $(CFLAGS) -c -o $@ $< -I$(APP_COUNTER_TEST_INC)
+%.o: $(APP_MNIST_SRC)/%.c
+	$(CC) $(CFLAGS) -c -o $@ $< -I$(APP_MNIST_INC)
 
 #check whether .h are up to date
-$(APP_COUNTER_TEST_SRC)/%.c: $(APP_COUNTER_TEST_INC)/%.h
+$(APP_MNIST_SRC)/%.c: $(APP_MNIST_INC)/%.h
