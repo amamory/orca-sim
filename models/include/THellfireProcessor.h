@@ -59,46 +59,54 @@ typedef struct {
 	uint64_t cycles;
 } risc_v_state;
 
+union DataMult {
+   uint32_t i;
+   float f;
+} ; 
+
+
 class UntimedMultiplier : public UntimedModel{
 
 private:
-	float _op1;
-	float _op2;
+	union DataMult _op1;
+	union DataMult _op2;
 public:	
 
-	UntimedMultiplier(std::string name): UntimedModel(name) {_op1=0; _op2=0;};
+	UntimedMultiplier(std::string name): UntimedModel(name) {_op1.i=0; _op2.i=0;};
 	~UntimedMultiplier(){};
 
 	// getters
-	float GetResult() {
-		float res = _op1*_op2;
-		cout << " XXXXXXXXXXXXXXXXXX GetResult " << _op1 << " x " << _op2 << " = " << res << endl;
-		return res ;
+	uint32_t GetResult() {
+		union DataMult res;
+		res.f = _op1.f*_op2.f;
+		printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1.i, _op2.i, res.i);
+		printf("XXXXXXXXXXXXXXXXXX GetResultFloat %.5f x %.5f = %.5f\n", _op1.f, _op2.f, res.f);
+		return res.i ;
 		
 		};
-	float GetOp1() {
+	uint32_t GetOp1() {
 		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op1 << endl;
-		return _op1;
+		return _op1.i;
 	};
-	float GetOp2() {
+	uint32_t GetOp2() {
 		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op2 << endl;
-		return _op2;
+		return _op2.i;
 	};
 
 	// setters
 
-	void SetOp1(float op1) {
-		_op1 = op1; 
+	void SetOp1(uint32_t op1) {
+		_op1.i = op1; 
 		//cout << " XXXXXXXXXXXXXXXXXX SetOp1: " << _op1 << endl;
 
 		};
-	void SetOp2(float op2) {
-		_op2 = op2; 
+	void SetOp2(uint32_t op2) {
+		_op2.i = op2; 
 		//cout << " XXXXXXXXXXXXXXXXXX SetOp2: " << _op2 << endl;
 
 		};
 
-	void Reset(){_op1=0; _op2=0;};
+	void Reset(){_op1.i=0; _op2.i=0;};
 };
 
 class THellfireProcessor : public TimedModel{
