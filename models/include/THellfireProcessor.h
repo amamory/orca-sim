@@ -115,28 +115,13 @@ public:
 		res = _op1*_op2;
 		printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1, _op2, res);
 		return res ;
-		
 		};
-	uint32_t GetOp1() {
-		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op1 << endl;
-		return _op1;
-	};
-	uint32_t GetOp2() {
-		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op2 << endl;
-		return _op2;
-	};
+	uint32_t GetOp1() {return _op1;};
+	uint32_t GetOp2() {return _op2;};
 
 	// setters
-
-	void SetOp1(uint32_t op1) {
-		_op1 = op1; 
-		//cout << " XXXXXXXXXXXXXXXXXX SetOp1: " << _op1 << endl;
-		};
-	void SetOp2(uint32_t op2) {
-		_op2 = op2; 
-		//cout << " XXXXXXXXXXXXXXXXXX SetOp2: " << _op2 << endl;
-
-		};
+	void SetOp1(uint32_t op1) {_op1 = op1; };
+	void SetOp2(uint32_t op2) {_op2 = op2; };
 
 	void Reset(){_op1=0; _op2=0;};
 };

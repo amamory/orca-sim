@@ -30,7 +30,6 @@ uint32_t mult(const uint32_t op1, const uint32_t op2){
 	return *MULT_RESULT;
 } 
 
-//Task for printing values store by CPU counters. 
 void int_mult(void){
     uint32_t op1; 
     uint32_t op2; 
@@ -50,7 +49,6 @@ void int_mult(void){
 
 		op2 += 1;
 
-		//add some delay to avoid flooding the network
 		delay_ms(1);
 		i++;
 	}
