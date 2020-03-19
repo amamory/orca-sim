@@ -18,7 +18,7 @@
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
  * GNU General Public License for more details.
- *
+ * 
  * You should have received a copy of the GNU General Public License along
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. 
@@ -159,9 +159,14 @@ int32_t THellfireProcessor::mem_read(risc_v_state *s, int32_t size, uint32_t add
 			case COMPARE2:		return s->compare2;
 			case UART_READ:		return getchar();
 			case UART_DIVISOR:	return 0;
-			case MULT_RESULT:   return _mult->GetResult();
-			case MULT_OP1:      return _mult->GetOp1();
-			case MULT_OP2:      return _mult->GetOp2();
+			// floating point multiplier
+			case MULT_RESULT:      return _FPmult->GetResult();
+			case MULT_OP1:         return _FPmult->GetOp1();
+			case MULT_OP2:         return _FPmult->GetOp2();
+			// int multiplier
+			case INT_MULT_RESULT:  return _Intmult->GetResult();
+			case INT_MULT_OP1:     return _Intmult->GetOp1();
+			case INT_MULT_OP2:     return _Intmult->GetOp2();
 		}
 			
 		//may the requested address fall in unmapped range, halt the simulation
@@ -270,9 +275,15 @@ void THellfireProcessor::mem_write(risc_v_state *s, int32_t size, uint32_t addre
 		case DEBUG_ADDR:    output_debug << (int8_t)(value & 0xff) << std::flush; return;
 		case UART_WRITE:    output_uart << (int8_t)(value & 0xff) << std::flush; return;
 		case UART_DIVISOR:  return;
+		// floating point multiplier
 		case MULT_RESULT:   return; // do nothing
-		case MULT_OP1:      _mult->SetOp1(value); return; 
-		case MULT_OP2:      _mult->SetOp2(value); return; 
+		case MULT_OP1:      _FPmult->SetOp1(value); return; 
+		case MULT_OP2:      _FPmult->SetOp2(value); return; 
+		// int multiplier
+		case INT_MULT_RESULT:   return; // do nothing
+		case INT_MULT_OP1:      _Intmult->SetOp1(value); return; 
+		case INT_MULT_OP2:      _Intmult->SetOp2(value); return; 
+		
 		case EXIT_TRAP:
 			std::cout << this->GetName() << ": exit trap triggered! " << std::endl;
 			dumpregs(s);
@@ -694,7 +705,8 @@ THellfireProcessor::THellfireProcessor(string name, USignal<uint8_t>* intr, USig
 
 	s = &context;
 	memset(s, 0, sizeof(risc_v_state));
-	_mult = new UntimedMultiplier("mult");
+	_FPmult = new UntimedFPMultiplier("FPmult");
+	_Intmult = new UntimedIntMultiplier("Intmult");
 	
 	s->vector = 0;
 	s->cause = 0;
@@ -736,10 +748,14 @@ THellfireProcessor::~THellfireProcessor(){
 
 	#endif
 
-	delete _mult;
+	delete _FPmult;
+	delete _Intmult;
 }
 
 void THellfireProcessor::Reset(){
     //TODO: to be implemented
+
+	_FPmult->Reset();
+	_Intmult->Reset();
     return;
 }

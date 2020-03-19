@@ -13,7 +13,7 @@
  */
 
 //STD libraries
-#include <stdio.h>
+#include <stdio.h> 
 #include <stdlib.h>
 #include <string.h>
 #include <stdint.h>
@@ -40,9 +40,14 @@
 #define UART_WRITE		0xf00000e0
 #define UART_READ			0xf00000e0
 #define UART_DIVISOR		0xf00000f0
-#define MULT_RESULT		0xf0000100
-#define MULT_OP1		0xf0000104
-#define MULT_OP2		0xf0000108
+// floating point multiplier
+#define MULT_RESULT		    0xf0000100
+#define MULT_OP1		    0xf0000104
+#define MULT_OP2		    0xf0000108
+// uint_32 multiplier
+#define INT_MULT_RESULT		0xf000010C
+#define INT_MULT_OP1		0xf0000110
+#define INT_MULT_OP2		0xf0000114
 
 #define ntohs(A) ( ((A)>>8) | (((A)&0xff)<<8) )
 #define htons(A) ntohs(A)
@@ -65,15 +70,15 @@ union DataMult {
 } ; 
 
 
-class UntimedMultiplier : public UntimedModel{
+class UntimedFPMultiplier : public UntimedModel{
 
 private:
 	union DataMult _op1;
 	union DataMult _op2;
 public:	
 
-	UntimedMultiplier(std::string name): UntimedModel(name) {_op1.i=0; _op2.i=0;};
-	~UntimedMultiplier(){};
+	UntimedFPMultiplier(std::string name): UntimedModel(name) {_op1.i=0; _op2.i=0;};
+	~UntimedFPMultiplier(){};
 
 	// getters
 	uint32_t GetResult() {
@@ -93,6 +98,50 @@ public:
 	void Reset(){_op1.i=0; _op2.i=0;};
 };
 
+
+class UntimedIntMultiplier : public UntimedModel{
+
+private:
+	uint32_t _op1;
+	uint32_t _op2;
+public:	
+
+	UntimedIntMultiplier(std::string name): UntimedModel(name) {_op1=0; _op2=0;};
+	~UntimedIntMultiplier(){};
+
+	// getters
+	uint32_t GetResult() {
+		uint32_t res;
+		res = _op1*_op2;
+		printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1, _op2, res);
+		return res ;
+		
+		};
+	uint32_t GetOp1() {
+		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op1 << endl;
+		return _op1;
+	};
+	uint32_t GetOp2() {
+		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op2 << endl;
+		return _op2;
+	};
+
+	// setters
+
+	void SetOp1(uint32_t op1) {
+		_op1 = op1; 
+		//cout << " XXXXXXXXXXXXXXXXXX SetOp1: " << _op1 << endl;
+		};
+	void SetOp2(uint32_t op2) {
+		_op2 = op2; 
+		//cout << " XXXXXXXXXXXXXXXXXX SetOp2: " << _op2 << endl;
+
+		};
+
+	void Reset(){_op1=0; _op2=0;};
+};
+
+
 class THellfireProcessor : public TimedModel{
 
 private:
@@ -107,7 +156,8 @@ private:
 	risc_v_state *s;
 	int i;
 
-	UntimedMultiplier* _mult;
+	UntimedFPMultiplier*  _FPmult;
+	UntimedIntMultiplier* _Intmult;
 	
 	#ifdef HFRISCV_ENABLE_COUNTERS
 	USignal<uint32_t>* _counter_iarith;
