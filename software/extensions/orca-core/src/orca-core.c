@@ -20,7 +20,8 @@
 //basic resources
 #include "orca-core.h"
 
-#include "../../../applications/mnist/include/mnist.h"
+//#include "../../../applications/mnist/include/mnist.h"
+#include "../../../applications/float-mult/include/float-mult.h"
 
 //Task mapping routine and entry-point. Please note that 
 //task mapping is done through software and the code below
@@ -35,8 +36,8 @@ void app_main(void)
     //
 
     //printf("cpu_id: %d\n", hf_cpuid());
-	//hf_spawn(float_mult, 0, 0, 0, "float_mult", 1024);   //10%
-	hf_spawn(mnist, 0, 0, 0, "mnist", 512 * 1024);   // 512Kbytes !!!
+	hf_spawn(float_mult,  5, 4, 5, "float_mult", 1024);   //10%
+	//hf_spawn(mnist, 5, 4, 5, "mnist", 128 * 1024);   // 64 Kbytes !!!
 
 	//spawn for all cores
 	//hf_spawn(counter_test, 0, 0, 0, "counters_test", 4096);

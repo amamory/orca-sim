@@ -19,15 +19,15 @@
  
 #include "float-mult.h"
 
-#define MULT_RESULT		(*(float *)0xf0000100)
-#define MULT_OP1		(*(float *)0xf0000104)
-#define MULT_OP2		(*(float *)0xf0000108)
+#define MULT_RESULT		(volatile uint32_t*)0xf0000100
+#define MULT_OP1		(volatile uint32_t*)0xf0000104
+#define MULT_OP2		(volatile uint32_t*)0xf0000108
 
 
-float mult(const float op1, const float op2){
-	MULT_OP1 = op1;
-	MULT_OP2 = op2;
-	return MULT_RESULT;
+uint32_t mult(const uint32_t op1, const uint32_t op2){
+	*MULT_OP1 = op1;
+	*MULT_OP2 = op2;
+	return *MULT_RESULT;
 }
 
 union Data {
@@ -38,6 +38,9 @@ union Data {
 //Task for printing values store by CPU counters. 
 void float_mult(void){
     union Data op1; 
+	//float op1_, op2_;
+	uint32_t * op1_i, * op2_i;
+
 	union Data op2_copy; 
     union Data op2; 
     union Data out_buggy; 
@@ -54,13 +57,18 @@ void float_mult(void){
 	op1.f = 10.0;
 	op2.f = 5.0;
 
+	op1_i = (uint32_t *) & op1.f;
+	op2_i = (uint32_t *) & op2.f;
+
 
     while (i<50){
 		ftoa(op1.f,sop1,2);
 		ftoa(op2.f,sop2,2);
-		out_buggy.i = mult(op1.i, op2.i); 
+		//out_buggy.i = mult(op1.i, op2.i); 
+		out_buggy.i = mult(*op1_i, *op2_i); 
+
 		// se estivesse correto, o valor de f2_copy == f2. f2_copy está truncado !
-		op2_copy.i = MULT_OP2;
+		//op2_copy.i = MULT_OP2;
 		i= ftoa(op2_copy.f,sop2_copy,2);
 	
 		// esse resultdo da correto

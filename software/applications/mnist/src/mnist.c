@@ -81,15 +81,18 @@ void mnist (void) {
 	float aux;
 
 	//Reading weights
+	printf("reading weight ...\n");
 	for (i = 0; i < NUMBER_OF_OUTPUT_CELLS; i++) {
 		setCellWeight(&mnist_l1.cell[i],weight_vector[i]);
 	}
+	//printf("weight read!\n");
 	
 	//Reading input images
 	for (i = 0; i < NUMBER_OF_OUTPUT_CELLS; i++) {
 		setLayerInput(&mnist_l1, image_vector[i]);
 		setCellOutput(&mnist_l1);
-		
+		//printf("cell %d!\n",i);
+
 		aux = 0.0;
 		for (j = 0; j < NUMBER_OF_OUTPUT_CELLS; j++) {
 			if (aux < mnist_l1.cell[j].output) {
