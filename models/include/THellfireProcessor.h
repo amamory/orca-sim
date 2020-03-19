@@ -82,29 +82,13 @@ public:
 		printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1.i, _op2.i, res.i);
 		printf("XXXXXXXXXXXXXXXXXX GetResultFloat %.5f x %.5f = %.5f\n", _op1.f, _op2.f, res.f);
 		return res.i ;
-		
 		};
-	uint32_t GetOp1() {
-		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op1 << endl;
-		return _op1.i;
-	};
-	uint32_t GetOp2() {
-		//cout << " XXXXXXXXXXXXXXXXXX GetOp1: " << _op2 << endl;
-		return _op2.i;
-	};
+	uint32_t GetOp1() {	return _op1.i;	};
+	uint32_t GetOp2() {	return _op2.i;	};
 
 	// setters
-
-	void SetOp1(uint32_t op1) {
-		_op1.i = op1; 
-		//cout << " XXXXXXXXXXXXXXXXXX SetOp1: " << _op1 << endl;
-
-		};
-	void SetOp2(uint32_t op2) {
-		_op2.i = op2; 
-		//cout << " XXXXXXXXXXXXXXXXXX SetOp2: " << _op2 << endl;
-
-		};
+	void SetOp1(uint32_t op1) {	_op1.i = op1; 	};
+	void SetOp2(uint32_t op2) {	_op2.i = op2; 	};
 
 	void Reset(){_op1.i=0; _op2.i=0;};
 };
