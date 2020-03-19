@@ -17,26 +17,11 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
  
-#ifndef _EXAMPLE_COUNTERS_H
-#define _EXAMPLE_COUNTERS_H
+#ifndef _MNIST_H
+#define _MNIST_H
 
 #include <hellfire.h>
-#include <noc.h>
 
-#include "orca-hardware-counters.h"
-
-#ifndef HFRISCV_ENABLE_COUNTERS
-#error "This application requires HFRISC_ENABLE_COUNTERS to be set."
-#endif
-
-#ifndef MEMORY_ENABLE_COUNTERS
-#error "This application requires MEMORY_ENABLE_COUNTERS to be set."
-#endif
-
-#ifndef ROUTER_ENABLE_COUNTERS
-#error "This application requires ROUTER_ENABLE_COUNTERS to be set."
-#endif
-
-void counter_test(void); // __attribute__((section (".tasks")));
+void mnist(void); // __attribute__((section (".tasks")));
 
 #endif /* _MORM_SP_H */

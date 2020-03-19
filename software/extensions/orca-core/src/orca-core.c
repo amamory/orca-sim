@@ -23,6 +23,7 @@
 //#include "../../../applications/int-mult/include/int-mult.h"
 //#include "../../../applications/float-mult/include/float-mult.h"
 #include "../../../applications/cpp-mult/include/cpp-mult.h"
+//#include "../../../applications/mnist/include/mnist.h"
 
 //Task mapping routine and entry-point. Please note that 
 //task mapping is done through software and the code below
@@ -37,9 +38,12 @@ void app_main(void)
     //
 
     //printf("cpu_id: %d\n", hf_cpuid());
-	//hf_spawn(int_mult, 0, 0, 0, "int_mult", 1024);   //10%
-	//hf_spawn(float_mult, 0, 0, 0, "float_mult", 1024);   //10%
-	hf_spawn(cpp_mult, 0, 0, 0, "cpp_mult", 1024);   //10%
+
+	//hf_spawn(int_mult, 5, 4, 5, "int_mult", 1024);   //10%
+	hf_spawn(cpp_mult,5, 4, 5, "cpp_mult", 1024);   //10%
+	//hf_spawn(float_mult,  5, 4, 5, "float_mult", 1024);   //10%
+	//hf_spawn(mnist, 5, 4, 5, "mnist", 128 * 1024);   // 128 Kbytes !!!
+
 
 	//spawn for all cores
 	//hf_spawn(counter_test, 0, 0, 0, "counters_test", 4096);
