@@ -30,17 +30,27 @@
 #define MULT_OP1		 (volatile uint32_t*)0xf0000104
 #define MULT_OP2		 (volatile uint32_t*)0xf0000108
 
-int mult( int op1,  int op2){
-	*MULT_OP1 = op1;
-	*MULT_OP2 = op2;
-	return *MULT_RESULT;
-}
 
 // union used to 'convert' float to int and int to float
 union Data {
    int i;
    float f;
 } ; 
+
+float mult( float op1,  float op2){
+	union Data res;
+	union Data o1; // aux input float
+	union Data o2; // aux weight float 
+
+	o1.f = op1;
+	o2.f = op2;
+
+	*MULT_OP1 = o1.i;
+	*MULT_OP2 = o2.i;
+	res.i = *MULT_RESULT;
+	return res.f;
+}
+
 
 // Layer = 784 i cells * 2 * 4 bytes * 10 o cells = +- 62Kbytes
 // image_vector  = 784 i cells  * 10 o cells * 4 bytes = +- 31Kbytes
@@ -81,53 +91,15 @@ void setCellWeight (Cell * c, float weight[]) {
 
 void setCellOutput (Layer * l) {
 	int i,j;
-	union Data aux;
-	union Data auxif; // aux input float
-	union Data auxwf;// aux weight float
-	//int *iip, *wip;
-	//float *ifp, *wfp;
-
-	//char s[20];
 		
 	for (i = 0; i < NUMBER_OF_OUTPUT_CELLS; i++) {
 		l->cell[i].output = 0;
-		//printf("Aux1 %d: i %x e w %x\n",j,&(l->cell[i].input[NUMBER_OF_INPUT_CELLS-1]),&(l->cell[i].weight[NUMBER_OF_INPUT_CELLS-1]));
-		//iip = (int *) &(l->cell[i].input[0]);
-		//wip = (int *) &(l->cell[i].weight[0]);
-		//ifp = (int *) &(l->cell[i].input[0]);
-		//wfp = (int *) &(l->cell[i].weight[0]);
 		for (j = 0; j < NUMBER_OF_INPUT_CELLS; j++) {
 			// UNCOMMENT THE NEXT 4 LINES TO USE THE INTERNAL MULTIPLIER
 			//l->cell[i].output = l->cell[i].output + (l->cell[i].input[j] * l->cell[i].weight[j]);
-
-			//l->cell[i].output = l->cell[i].output + mult(l->cell[i].input[j] , l->cell[i].weight[j]);
-			//aux = (l->cell[i].input[j] * l->cell[i].weight[j]);
-			// UNCOMMENT THE NEXT 4 LINES TO USE THE EXTERNAL MULTIPLIER
-			auxif.f = l->cell[i].input[j];
-			auxwf.f = l->cell[i].weight[j];
-			aux.i = mult(auxif.i , auxwf.i);		
-			l->cell[i].output += aux.f;
-			//aux.i = mult(*iip , *wip);
-			/*
-			if (l->cell[i].input[j] != 0){
-				ftoa(*wfp,s,8);
-				printf("Aux %d: i %d e w %s\n",j,*iip,s);				
-				//ftoa(aux.f,s,8);
-				//printf("Aux %d: %s\n",j,s);
-			}
-			*/
-			//iip++;
-			//wip++;
-			//ifp++;
-			//wfp++;
+			l->cell[i].output = l->cell[i].output + mult(l->cell[i].input[j] , l->cell[i].weight[j]);
 		}
-		//printf("Aux %d: i %x e w %x\n",j,iip,wip);
 		l->cell[i].output = l->cell[i].output / (float)NUMBER_OF_INPUT_CELLS;
-		/*
-		ftoa(l->cell[i].output,s,8);
-		printf("Output %d: %s\n",i,s);
-		*/
-		//hf_kill(hf_selfid());
 	}	
 }
 
