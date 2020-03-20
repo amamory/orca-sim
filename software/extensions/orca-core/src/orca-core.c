@@ -26,6 +26,8 @@
 //#include "../../../applications/cpp-mult/include/cpp-mult.h"
 //#include "../../../applications/mnist/include/mnist.h"
 #include "../../../applications/mnist-ext-mult/include/mnist-ext-mult.h"
+//#include "../../../applications/cpp-mult/include/cpp-mult.h"
+//#include "../../../applications/ann/include/ann.h" 
 
 //Task mapping routine and entry-point. Please note that 
 //task mapping is done through software and the code below
@@ -47,7 +49,10 @@ void app_main(void)
 	//hf_spawn(cpp_float_mult,  5, 4, 5, "cpp_float_mult", 1024);   //10%
 	//hf_spawn(mnist, 5, 4, 5, "mnist", 128 * 1024);   // 128 Kbytes !!!
 	hf_spawn(mnist_ext_mult, 5, 4, 5, "mnist_ext_mult", 128 * 1024);   // 128 Kbytes !!!
-
+	//hf_spawn(int_mult, 0, 0, 0, "int_mult", 1024);   //10%
+	//hf_spawn(float_mult, 0, 0, 0, "float_mult", 1024);   //10%
+	//hf_spawn(cpp_mult, 0, 0, 0, "cpp_mult", 1024);   //10%
+	//hf_spawn(ann, 0, 0, 0, "ann", 10*1024);   //10% 
 
 	//spawn for all cores
 	//hf_spawn(counter_test, 0, 0, 0, "counters_test", 4096);
