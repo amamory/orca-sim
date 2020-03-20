@@ -17,19 +17,11 @@
  * with this program; if not, write to the Free Software Foundation, Inc.,
  * 51 Franklin Street, Fifth Floor, Boston, MA 02110-1301 USA. */
  
-#ifndef _MNIST_H
-#define _MNIST_H
-
-#ifdef __cplusplus  
-extern "C" { 
-#endif 
+#ifndef _MNIST_EXT_MULT_H
+#define _MNIST_EXT_MULT_H
 
 #include <hellfire.h>
 
 void mnist_ext_mult(void); // __attribute__((section (".tasks")));
-
-#ifdef __cplusplus 
-} 
-#endif 
 
 #endif /* _MORM_SP_H */
