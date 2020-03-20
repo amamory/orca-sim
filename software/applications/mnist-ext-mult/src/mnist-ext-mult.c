@@ -84,33 +84,50 @@ void setCellOutput (Layer * l) {
 	union Data aux;
 	union Data auxif; // aux input float
 	union Data auxwf;// aux weight float
+	//int *iip, *wip;
+	//float *ifp, *wfp;
+
 	//char s[20];
 		
 	for (i = 0; i < NUMBER_OF_OUTPUT_CELLS; i++) {
 		l->cell[i].output = 0;
+		//printf("Aux1 %d: i %x e w %x\n",j,&(l->cell[i].input[NUMBER_OF_INPUT_CELLS-1]),&(l->cell[i].weight[NUMBER_OF_INPUT_CELLS-1]));
+		//iip = (int *) &(l->cell[i].input[0]);
+		//wip = (int *) &(l->cell[i].weight[0]);
+		//ifp = (int *) &(l->cell[i].input[0]);
+		//wfp = (int *) &(l->cell[i].weight[0]);
 		for (j = 0; j < NUMBER_OF_INPUT_CELLS; j++) {
-			// to execute with internal multiplier, just uncomment the next line
+			// UNCOMMENT THE NEXT 4 LINES TO USE THE INTERNAL MULTIPLIER
 			//l->cell[i].output = l->cell[i].output + (l->cell[i].input[j] * l->cell[i].weight[j]);
 
 			//l->cell[i].output = l->cell[i].output + mult(l->cell[i].input[j] , l->cell[i].weight[j]);
 			//aux = (l->cell[i].input[j] * l->cell[i].weight[j]);
+			// UNCOMMENT THE NEXT 4 LINES TO USE THE EXTERNAL MULTIPLIER
 			auxif.f = l->cell[i].input[j];
 			auxwf.f = l->cell[i].weight[j];
-			aux.i = mult(auxif.i , auxwf.i);
+			aux.i = mult(auxif.i , auxwf.i);		
 			l->cell[i].output += aux.f;
+			//aux.i = mult(*iip , *wip);
 			/*
 			if (l->cell[i].input[j] != 0){
-				ftoa(aux.f,s,8);
-				printf("Aux %d: %s\n",j,s);
+				ftoa(*wfp,s,8);
+				printf("Aux %d: i %d e w %s\n",j,*iip,s);				
+				//ftoa(aux.f,s,8);
+				//printf("Aux %d: %s\n",j,s);
 			}
 			*/
+			//iip++;
+			//wip++;
+			//ifp++;
+			//wfp++;
 		}
+		//printf("Aux %d: i %x e w %x\n",j,iip,wip);
 		l->cell[i].output = l->cell[i].output / (float)NUMBER_OF_INPUT_CELLS;
 		/*
 		ftoa(l->cell[i].output,s,8);
 		printf("Output %d: %s\n",i,s);
-		hf_kill(hf_selfid());
 		*/
+		//hf_kill(hf_selfid());
 	}	
 }
 
