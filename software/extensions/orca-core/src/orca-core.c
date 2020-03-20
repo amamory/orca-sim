@@ -22,7 +22,8 @@
 
 //#include "../../../applications/int-mult/include/int-mult.h"
 //#include "../../../applications/float-mult/include/float-mult.h"
-#include "../../../applications/cpp-mult/include/cpp-mult.h"
+//#include "../../../applications/cpp-mult/include/cpp-mult.h"
+#include "../../../applications/ann/include/ann.h" 
 
 //Task mapping routine and entry-point. Please note that 
 //task mapping is done through software and the code below
@@ -39,7 +40,8 @@ void app_main(void)
     //printf("cpu_id: %d\n", hf_cpuid());
 	//hf_spawn(int_mult, 0, 0, 0, "int_mult", 1024);   //10%
 	//hf_spawn(float_mult, 0, 0, 0, "float_mult", 1024);   //10%
-	hf_spawn(cpp_mult, 0, 0, 0, "cpp_mult", 1024);   //10%
+	//hf_spawn(cpp_mult, 0, 0, 0, "cpp_mult", 1024);   //10%
+	hf_spawn(ann, 0, 0, 0, "ann", 10*1024);   //10% 
 
 	//spawn for all cores
 	//hf_spawn(counter_test, 0, 0, 0, "counters_test", 4096);
