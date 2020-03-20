@@ -64,13 +64,14 @@ typedef struct {
 	uint64_t cycles;
 } risc_v_state;
 
+
+
+class UntimedFPMultiplier : public UntimedModel{
+
 union DataMult {
    uint32_t i;
    float f;
 } ; 
-
-
-class UntimedFPMultiplier : public UntimedModel{
 
 private:
 	union DataMult _op1;
@@ -84,8 +85,8 @@ public:
 	uint32_t GetResult() {
 		union DataMult res;
 		res.f = _op1.f*_op2.f;
-		printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1.i, _op2.i, res.i);
-		printf("XXXXXXXXXXXXXXXXXX GetResultFloat %.5f x %.5f = %.5f\n", _op1.f, _op2.f, res.f);
+		//printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1.i, _op2.i, res.i);
+		//printf("XXXXXXXXXXXXXXXXXX GetResultFloat %.8f x %.8f = %.8f\n", _op1.f, _op2.f, res.f);
 		return res.i ;
 		};
 	uint32_t GetOp1() {	return _op1.i;	};
@@ -113,7 +114,7 @@ public:
 	uint32_t GetResult() {
 		uint32_t res;
 		res = _op1*_op2;
-		printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1, _op2, res);
+		//printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1, _op2, res);
 		return res ;
 		};
 	uint32_t GetOp1() {return _op1;};
