@@ -7,7 +7,7 @@ APP_MNIST_LIB   := app-$(APP_MNIST_NAME).a
 
 # Update these lines with your source code
 APP_MNIST_OBJS := \
-	mnist.o
+	$(APP_MNIST_NAME).o
 
 #pack everithing in a single lib
 $(APP_MNIST_LIB) : $(APP_MNIST_OBJS)

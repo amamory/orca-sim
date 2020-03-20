@@ -97,6 +97,7 @@ void mnist (void) {
 		//printf("cell %d!\n",i);
 
 		aux = 0.0;
+		idx = 0;
 		for (j = 0; j < NUMBER_OF_OUTPUT_CELLS; j++) {
 			if (aux < mnist_l1.cell[j].output) {
 				aux = mnist_l1.cell[j].output;
