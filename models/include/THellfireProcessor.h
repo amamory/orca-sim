@@ -25,6 +25,7 @@
 #include <UMemory.h>
 #include <USignal.h>
 #include <UMult.h>
+#include <TCustomInst.h>
 
 #define EXIT_TRAP		0xe0000000
 #define IRQ_VECTOR		0xf0000000
@@ -76,6 +77,10 @@ private:
 	UntimedFPMultiplier*  _FPmult;
 	UntimedIntMultiplier* _Intmult;
 	vector<UntimedFPMultiplier*>  _FPmultV;
+
+	// TODO it makes more sense to map each custom instruction to different classes modeling different behaviour. 
+	// For now, both instrctions model the same logic 
+	TimedCustomInst *_Custom0, *_Custom1;
 	
 	#ifdef HFRISCV_ENABLE_COUNTERS
 	USignal<uint32_t>* _counter_iarith;

@@ -8,7 +8,7 @@ LIBSIM_PATH:=../simulator
 LIBSIM:=$(LIBSIM_PATH)/bin/libsim.a
 
 #include flags (plus external flags)
-CPPFLAGS :=-I./include -I../simulator/include -c $(COMPLINE) $(GLOBAL_SETTINGS)
+CPPFLAGS :=-I./include -I../simulator/include -c $(COMPLINE) $(GLOBAL_SETTINGS) -fpermissive 
 
 #list of dependencies (source files)
 TARGET_DEPS := \
@@ -19,6 +19,7 @@ TARGET_DEPS := \
 	$(OUTPUTDIR)/TRouter.o \
 	$(OUTPUTDIR)/THellfireProcessor.o \
 	$(OUTPUTDIR)/TDmaNetif.o \
+	$(OUTPUTDIR)/TCustomInst.o \
 	$(OUTPUTDIR)/UMult.o
 
 

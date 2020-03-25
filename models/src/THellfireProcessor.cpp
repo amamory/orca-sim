@@ -467,6 +467,7 @@ void THellfireProcessor::UpdateCounters(int opcode, int funct3){
 #endif /* HFRISCV_ENABLE_COUNTERS */
 
 SimulationTime THellfireProcessor::Run(){
+	stringstream ss;
 
 	//update "external counters"
 	s->counter++;
@@ -655,7 +656,6 @@ SimulationTime THellfireProcessor::Run(){
 				break;
 			}
 			break;
-/*
 		// instruction custom0. see https://github.com/riscv/riscv-opcodes/blob/master/opcodes-custom
 		case 0x02:
 			//@custom0            rd rs1 imm12 14..12=0 6..2=0x02 1..0=3
@@ -665,12 +665,14 @@ SimulationTime THellfireProcessor::Run(){
 			//@custom0.rd.rs1     rd rs1 imm12 14..12=6 6..2=0x02 1..0=3
 			//@custom0.rd.rs1.rs2 rd rs1 imm12 14..12=7 6..2=0x02 1..0=3
 			switch(funct3){
-					case 0x0: custom0.Run(); break;
-					case 0x2: custom0.Run(rs1); break;
-					case 0x3: custom0.Run(rs1,rs2); break;
-					case 0x4: custom0.Run(0,0,&(r[rd])); break;
-					case 0x5: custom0.Run(rs1,0,&(r[rd])); break;
-					case 0x7: custom0.Run(rs1,rs2,&(r[rd])); break;
+				/*
+					case 0x0: _Custom0.SetUp(); break;
+					case 0x2: _Custom0.SetUp((float)rs1); break;
+					case 0x3: _Custom0.SetUp((float)rs1,(float)rs2); break;
+					case 0x4: _Custom0.SetUp(0,0,(float*)&(r[rd])); break;
+					case 0x5: _Custom0.SetUp((float)rs1,0,(float*)&(r[rd])); break;
+					*/
+					case 0x7: _Custom0->SetUp((float)rs1,(float)rs2,(float*)&(r[rd])); break;
 					default: goto fail;
 			}
 			break;
@@ -683,19 +685,20 @@ SimulationTime THellfireProcessor::Run(){
 			//@custom1.rd.rs1     rd rs1 imm12 14..12=6 6..2=0x0A 1..0=3
 			//@custom1.rd.rs1.rs2 rd rs1 imm12 14..12=7 6..2=0x0A 1..0=3
 			switch(funct3){
-					case 0x0: custom1.Run(); break;
-					case 0x2: custom1.Run(rs1); break;
-					case 0x3: custom1.Run(rs1,rs2); break;
-					case 0x4: custom1.Run(0,0,&(r[rd])); break;
-					case 0x5: custom1.Run(rs1,0,&(r[rd])); break;
-					case 0x7: custom1.Run(rs1,rs2,&(r[rd])); break;
+				/*
+					case 0x0: _Custom1.SetUp(); break;
+					case 0x2: _Custom1.SetUp(rs1); break;
+					case 0x3: _Custom1.SetUp(rs1,rs2); break;
+					case 0x4: _Custom1.SetUp(0,0,&(r[rd])); break;
+					case 0x5: _Custom1.SetUp(rs1,0,&(r[rd])); break;
+					*/
+					case 0x7: _Custom1->SetUp((float)rs1,(float)rs2,(float*)&(r[rd])); break;
 					default: goto fail;
 			}
 			break;
 		// instructions custom2 and custom3 are reserved. Thus, it is not recommended to use them
 		case 0x16:
 		case 0x1E:
-			stringstream ss;
 			ss << this->GetName() << ":this custom instruction is reserved (pc=0x" << std::hex << s->pc;
 			ss << " opcode=0x" << std::hex << inst << ")";
 
@@ -704,10 +707,10 @@ SimulationTime THellfireProcessor::Run(){
 			
 			throw std::runtime_error(ss.str());
 			break;
-*/
+
 		default:
 fail:
-			stringstream ss;
+			//stringstream ss;
 			ss << this->GetName() << ":invalid opcode (pc=0x" << std::hex << s->pc;
 			ss << " opcode=0x" << std::hex << inst << ")";
 	
@@ -802,6 +805,10 @@ THellfireProcessor::THellfireProcessor(string name, USignal<uint8_t>* intr, USig
 		auxFPMult = new UntimedFPMultiplier("FPmult["+std::to_string(i)+"]");
 		_FPmultV.push_back(auxFPMult);
 	}
+
+	// create the custom instructions
+	_Custom0 = new TimedCustomInst("Custom0");
+	_Custom1 = new TimedCustomInst("Custom1");
 	
 	s->vector = 0;
 	s->cause = 0;
@@ -847,7 +854,10 @@ THellfireProcessor::~THellfireProcessor(){
 	delete _Intmult;
 	for(int i=0;i<SIMD_SIZE;i++)
 		delete _FPmultV[i];
-	_FPmultV.clear();	
+	_FPmultV.clear();
+
+	delete _Custom0;
+	delete _Custom1;
 }
 
 void THellfireProcessor::Reset(){
