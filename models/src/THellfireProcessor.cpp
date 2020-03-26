@@ -660,6 +660,8 @@ SimulationTime THellfireProcessor::Run(){
 		case 0x0B:
 			//funct7(31:25) , rs2(24:20), rs1(19:15), funct3(14:12), rd(11:7), opc(6:0)
 			//funct3(14:12) is fixed to b011. This could be used to support additions instructions if necessary 
+			//using only funct7 to specicy the custom instruction would give 2^7 new custom instructions.
+			//If funct7+funct3 are used, them 2^(7+3) new custom instructions !!!
 
 			// handfull debug code for custom instructions. do not delete it !!!
 			// cout << "CUSTOM0 - (pc=0x" << std::hex << s->pc << " opcode=0x" << std::hex << inst << ")" << endl << endl;
@@ -688,6 +690,8 @@ SimulationTime THellfireProcessor::Run(){
 		case 0x2B:
 			//funct7(31:25) , rs2(24:20), rs1(19:15), funct3(14:12), rd(11:7), opc(6:0)
 			// additional space to define custom instructions using opcode 0x2B.
+			// If 2^(7+3) custom0 isntructions are not enough, you can add more 2^(7+3) by using custom1
+			// So, it is possible to define up to 2048 custom instructions !!! 
 			// follow the example of custom0 to insert more instructions
 			goto fail;
 			break;
