@@ -32,9 +32,9 @@
 class TimedCustomInst : public TimedModel{ 
 
 private:
-	float _op1;
-	float _op2;
-	float *_res;
+	int32_t *_op1;
+	int32_t *_op2;
+	int32_t *_res;
 public:	
 
 	TimedCustomInst(std::string name): TimedModel(name) {_op1=0; _op2=0; _res=0;};
@@ -44,7 +44,7 @@ public:
 	SimulationTime Run();
 
 	//SimulationTime SetUp(float op1=0.0, float op2=0.0, float *res=0);
-	SimulationTime SetUp(float op1, float op2, float *res);
+	SimulationTime SetUp(int32_t *op1, int32_t *op2, int32_t *res);
 
 	void Reset(){_op1=0; _op2=0; _res=0;};
 };

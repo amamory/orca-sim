@@ -657,7 +657,8 @@ SimulationTime THellfireProcessor::Run(){
 			}
 			break;
 		// instruction custom0. see https://github.com/riscv/riscv-opcodes/blob/master/opcodes-custom
-		case 0x02:
+		case 0x0B:
+			cout << "CUUUUUUUUUSTOM0 !!!" << endl << endl << endl;
 			//@custom0            rd rs1 imm12 14..12=0 6..2=0x02 1..0=3
 			//@custom0.rs1        rd rs1 imm12 14..12=2 6..2=0x02 1..0=3
 			//@custom0.rs1.rs2    rd rs1 imm12 14..12=3 6..2=0x02 1..0=3
@@ -672,12 +673,13 @@ SimulationTime THellfireProcessor::Run(){
 					case 0x4: _Custom0.SetUp(0,0,(float*)&(r[rd])); break;
 					case 0x5: _Custom0.SetUp((float)rs1,0,(float*)&(r[rd])); break;
 					*/
-					case 0x7: _Custom0->SetUp((float)rs1,(float)rs2,(float*)&(r[rd])); break;
+					case 0x7: _Custom0->SetUp(&(r[rs1]),&(r[rs2]),&(r[rd])); break;
 					default: goto fail;
 			}
 			break;
 		// instruction custom1. see https://github.com/riscv/riscv-opcodes/blob/master/opcodes-custom
-		case 0x0A:
+		case 0x2B:
+			cout << "CUUUUUUUUUSTOM1 !!!" << endl << endl << endl;
 			//@custom1            rd rs1 imm12 14..12=0 6..2=0x0A 1..0=3
 			//@custom1.rs1        rd rs1 imm12 14..12=2 6..2=0x0A 1..0=3
 			//@custom1.rs1.rs2    rd rs1 imm12 14..12=3 6..2=0x0A 1..0=3
@@ -692,18 +694,21 @@ SimulationTime THellfireProcessor::Run(){
 					case 0x4: _Custom1.SetUp(0,0,&(r[rd])); break;
 					case 0x5: _Custom1.SetUp(rs1,0,&(r[rd])); break;
 					*/
-					case 0x7: _Custom1->SetUp((float)rs1,(float)rs2,(float*)&(r[rd])); break;
+					case 0x7: _Custom1->SetUp(&(r[rs1]),&(r[rs2]),&(r[rd])); break;
 					default: goto fail;
 			}
 			break;
 		// instructions custom2 and custom3 are reserved. Thus, it is not recommended to use them
-		case 0x16:
-		case 0x1E:
+		case 0x5B:
+		case 0x7B:
+			cout << "CUUUUUUUUUSTOM2 e 3 !!! - (pc=0x" << std::hex << s->pc << " opcode=0x" << std::hex << inst << ")" << endl << endl;
+
 			ss << this->GetName() << ":this custom instruction is reserved (pc=0x" << std::hex << s->pc;
 			ss << " opcode=0x" << std::hex << inst << ")";
 
 			dumpregs(s);
 			bp(s, RISCV_INVALID_OPCODE);
+			cout << ss.str();
 			
 			throw std::runtime_error(ss.str());
 			break;
@@ -711,11 +716,29 @@ SimulationTime THellfireProcessor::Run(){
 		default:
 fail:
 			//stringstream ss;
+			cout << "CARAAAAAIO !!! - (pc=0x" << std::hex << s->pc << " opcode=0x" << std::hex << inst << ")" << endl << endl;
+			// print the fields of a R-type instruction
+			const uint32_t mask_f7  = 0b11111110000000000000000000000000;
+			const uint32_t mask_rs2 = 0b00000001111100000000000000000000;
+			const uint32_t mask_rs1 = 0b00000000000011111000000000000000;
+			const uint32_t mask_f3  = 0b00000000000000000111000000000000;
+			const uint32_t mask_rd  = 0b00000000000000000000111110000000;
+			const uint32_t mask_opc = 0b00000000000000000000000001111111;
+
+			cout << "f7:0x"  << std::hex << ((mask_f7&inst)  >> 25)  << endl
+				 << "rs2:0x" << std::hex << ((mask_rs2&inst) >> 20)  << endl
+				 << "rs1:0x" << std::hex << ((mask_rs1&inst) >> 15)  << endl
+				 << "f3:0x"  << std::hex << ((mask_f3&inst)  >> 12)  << endl
+				 << "rd:0x"  << std::hex << ((mask_rd&inst)  >> 7)   << endl
+				 << "opc:0x" << std::hex << ((mask_opc&inst) >> 0)  << endl << endl;
+
+
 			ss << this->GetName() << ":invalid opcode (pc=0x" << std::hex << s->pc;
 			ss << " opcode=0x" << std::hex << inst << ")";
 	
 			dumpregs(s);
 			bp(s, RISCV_INVALID_OPCODE);
+			cout << ss.str();
 			
 			throw std::runtime_error(ss.str());
 			break;

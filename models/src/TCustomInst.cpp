@@ -23,7 +23,7 @@
 #include <TCustomInst.h>
 
 SimulationTime TimedCustomInst::Run() {
-    *_res = _op1*_op2;
+    *_res = *(_op1) * *(_op2);
     //printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1.i, _op2.i, res.i);
     //printf("XXXXXXXXXXXXXXXXXX GetResultFloat %.8f x %.8f = %.8f\n", _op1.f, _op2.f, res.f);
     return 1; //takes only 1 cycle to execute this operation
@@ -31,7 +31,7 @@ SimulationTime TimedCustomInst::Run() {
 
 // at least one operand is mandatory
 //SimulationTime TimedCustomInst::SetUp(float op1=0.0, float op2=0.0, float *res=0){
-SimulationTime TimedCustomInst::SetUp(float op1, float op2, float *res){
+SimulationTime TimedCustomInst::SetUp(int32_t *op1, int32_t *op2, int32_t *res){
     _op1 = op1;
     _op2 = op2;
     _res = res;
