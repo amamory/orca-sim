@@ -802,7 +802,7 @@ THellfireProcessor::THellfireProcessor(string name, USignal<uint8_t>* intr, USig
 
 	// create the custom instructions
 	_Custom0 = new TimedCustomInst("Custom0");
-	_Custom1 = new TimedCustomInst("Custom1");
+	//_Custom1 = new TimedCustomInst("Custom1");
 	
 	s->vector = 0;
 	s->cause = 0;
@@ -851,7 +851,7 @@ THellfireProcessor::~THellfireProcessor(){
 	_FPmultV.clear();
 
 	delete _Custom0;
-	delete _Custom1;
+	//delete _Custom1;
 }
 
 void THellfireProcessor::Reset(){

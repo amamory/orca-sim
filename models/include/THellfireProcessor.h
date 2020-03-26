@@ -80,7 +80,8 @@ private:
 
 	// TODO it makes more sense to map each custom instruction to different classes modeling different behaviour. 
 	// For now, both instrctions model the same logic 
-	TimedCustomInst *_Custom0, *_Custom1;
+	TimedCustomInst *_Custom0;
+	//TimedCustomInst *_Custom1;
 	
 	#ifdef HFRISCV_ENABLE_COUNTERS
 	USignal<uint32_t>* _counter_iarith;
