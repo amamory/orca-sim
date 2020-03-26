@@ -682,7 +682,7 @@ SimulationTime THellfireProcessor::Run(){
 
 			switch(funct7){
 					case 0x0: _Custom0->SetUp(&(r[rs1]),&(r[rs2]),&(r[rd])); break;
-					case 0x1: _Custom1->SetUpFloat(&(r[rs1]),&(r[rs2]),&(r[rd])); break;
+					case 0x1: _Custom0->SetUpFloat(&(r[rs1]),&(r[rs2]),&(r[rd])); break;
 					default: goto fail;
 			}
 			break;
