@@ -23,9 +23,15 @@
 #include <TCustomInst.h>
 
 SimulationTime TimedCustomInst::Run() {
-    *_res = *(_op1) * *(_op2);
-    //printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", _op1.i, _op2.i, res.i);
-    //printf("XXXXXXXXXXXXXXXXXX GetResultFloat %.8f x %.8f = %.8f\n", _op1.f, _op2.f, res.f);
+    if (_type == INT){
+        *_res = *(_op1) * *(_op2);
+        printf("XXXXXXXXXXXXXXXXXX GetResultInt   %d x %d = %d\n", *_op1, *_op2, *_res);
+    }else
+    {
+        *_resf = *(_op1f) * *(_op2f);
+        printf("XXXXXXXXXXXXXXXXXX GetResultFloat %.4f x %.4f = %.4f\n", *_op1f, *_op2f, *_resf);
+    }
+    
     return 1; //takes only 1 cycle to execute this operation
 };
 
@@ -35,6 +41,15 @@ SimulationTime TimedCustomInst::SetUp(int32_t *op1, int32_t *op2, int32_t *res){
     _op1 = op1;
     _op2 = op2;
     _res = res;
+    _type = INT;
+    return Run();
+}
+
+SimulationTime TimedCustomInst::SetUpFloat(int32_t *op1, int32_t *op2, int32_t *res){
+    _op1f = (float *)op1;
+    _op2f = (float *)op2;
+    _resf = (float *)res; 
+    _type = FLOAT;
     return Run();
 }
 

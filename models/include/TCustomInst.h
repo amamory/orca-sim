@@ -30,11 +30,16 @@
  * TODO: does it work with signed values ?!?!
  */
 class TimedCustomInst : public TimedModel{ 
+	enum dataType {INT,FLOAT};
 
 private:
+	dataType _type;
 	int32_t *_op1;
 	int32_t *_op2;
 	int32_t *_res;
+	float *_op1f;
+	float *_op2f;
+	float *_resf;	
 public:	
 
 	TimedCustomInst(std::string name): TimedModel(name) {_op1=0; _op2=0; _res=0;};
@@ -43,7 +48,8 @@ public:
 	// main run function
 	SimulationTime Run();
 
-	//SimulationTime SetUp(float op1=0.0, float op2=0.0, float *res=0);
+	//SimulationTime SetUpf(float *op1, float *op2, float *res);
+	SimulationTime SetUpFloat(int32_t *op1, int32_t *op2, int32_t *res);
 	SimulationTime SetUp(int32_t *op1, int32_t *op2, int32_t *res);
 
 	void Reset(){_op1=0; _op2=0; _res=0;};
